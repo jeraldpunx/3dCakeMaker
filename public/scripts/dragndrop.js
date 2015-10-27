@@ -10,17 +10,14 @@ $(document).ready(function() {
 			var id = $(ui.draggable).attr('id');
 			var cake = $(ui.draggable).html();
 			var box = $(this).attr('id');
+
 			location.reload();
 			$.ajax({
 				url: '/addItemCakeModel',
 				type: 'GET',
-				data: {
-					'id' : id,
-					'box' : box
-				},
-
+				data: {id: id, box: box},
 				'success': function(data) {
-					//$(ui.draggable).remove();
+					$(ui.draggable).remove();
 				
 					$('#' + box).append('<div id="' + id + '">' + cake + '</div>');
 					$('div#' + id).draggable({

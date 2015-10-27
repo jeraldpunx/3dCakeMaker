@@ -218,8 +218,8 @@ class CakeController extends BaseController {
    
     $_SESSION['findLayers']='BaseLayer';
 
-      if( $_SESSION['cakeModelID']==0)
-      {  $cake->save();
+      if( $_SESSION['cakeModelID']==0) {  
+        $cake->save();
         $_SESSION['cakeModelID'] = $cake->id;
 
       }
@@ -238,13 +238,13 @@ class CakeController extends BaseController {
 
    public function addItemCakeModel(){
       // return View::make('createCake');
+
      $id = Input::get("id");
      $box = Input::get("box");
-
+     // return Response::json_encode($image);
       $Layers= layer::find($id);
 
       $findCaketogenerateModel = cakeModel::find($_SESSION['cakeModelID']);
-     
 
   if($Layers['BaseLayer']==1||$Layers['BaseLayer']>0){
 
@@ -349,18 +349,14 @@ class CakeController extends BaseController {
    public function savePrintscreen(){
      $CakeModel = cakeModel::find($_SESSION['cakeModelID']);
 
-
-      $image = Input::file('image');
-            if($image) {
-                $upload_folder = '/img/upload/';
-                $file_name = str_random(30). '.' . $image->getClientOriginalExtension();
-                $image->move(public_path() . $upload_folder, $file_name);
-            }
-   
-    $CakeModel->image = $file_name;
-    $CakeModel->save();
-    return Redirect::back();
-}
+     $CakeModel->name           = Input::get('cake_name');
+     $CakeModel->price          = Input::get('cake_price');
+     $CakeModel->category       = Input::get('cake_category');
+     $CakeModel->description    = Input::get('cake_description');
+     $CakeModel->image          = Input::get('image');
+     $CakeModel->save();
+     $_SESSION['cakeModelID'] = 0;
+  }
 
 
 

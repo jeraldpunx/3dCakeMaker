@@ -63,3 +63,11 @@ Route::get('addItemCakeModel','CakeController@addItemCakeModel');
 Route::get('fuck', 'CakeController@fuck');
 Route::post('findLayer', 'CakeController@findLayer');
 Route::post('savePrintscreen', 'CakeController@savePrintscreen');
+
+
+
+
+Route::get('admin/reports', 			['as'=>'admin/reports', 	'uses'=>'AdminController@reports']);
+Route::get('admin/users', 				['as'=>'admin/users', 		'uses'=>'AdminController@users']);
+Route::get('admin/user/{user_id}', 		['as'=>'admin/user', 		'uses'=>'AdminController@user']);
+Route::get('admin/cakes', 				['as'=>'admin/cakes', 		'uses'=>'AdminController@cakes']);

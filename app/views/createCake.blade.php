@@ -4,7 +4,6 @@
         <title>CAKEOLOGY</title>
         <link href="bootstrap/css/bootstrap.css" rel='stylesheet' type='text/css' />
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="bootstrap/js/jquery.min.js"></script>
          <!-- Custom Theme files -->
         <link href="bootstrap/css/style.css" rel='stylesheet' type='text/css' />
          <!-- Custom Theme files -->
@@ -24,14 +23,14 @@
     </style>
     <body>
     <!-- html -->
+
     {{ HTML::script('bootstrap/js/jquery.min.js') }}
     {{ HTML::style('bootstrap/css/style.css') }}
     {{ HTML::style('bootstrap/css/bootstrap.css') }}
 
     <!-- cakemaker -->
     {{ HTML::style('css/style.css') }}
-    {{ HTML::script('http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js') }}
-    {{ HTML::script('bootstrap/js/jquery.min.js') }}
+
     {{ HTML::script('http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js') }}
     {{ HTML::script('scripts/dragndrop.js') }}
     <!-- {{ HTML::script('scripts/generateModel.js') }} -->
@@ -133,16 +132,6 @@
 
 
 
- <!--END INVI/RIKImartin para kuha2 sa value para sa cake og printscreen-->
-  
-    {{ Form::open(array('url' => 'savePrintscreen','files'=>true)) }}
-
-                    {{ Form::label('image', 'IMAGE', array('class' => 'col-sm-2 control-label')) }}
-                    {{ Form::file('image') }}
-
-                    {{ Form::submit('Save!', array('class' => 'btn btn-primary')) }}
-                    {{ Form::close() }}
-
 <!-- hiding shit -->
 <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation" style="width:90px; position:fixed;">
         <div class="navbar-toggler">
@@ -217,7 +206,7 @@
             var mouseXOnMouseDown = 0;
             var windowHalfX = window.innerWidth / 2;
             var windowHalfY = window.innerHeight / 2;
-
+            var controls;
             init();
             animate();
 
@@ -239,7 +228,6 @@
                 group.position.y = 100;
                 group.position.x = 100;
                 scene.add( group );
-
 
 
                 //var material = new THREE.MeshPhongMaterial( {  color: 0xffffff, transparent: true, opacity: 0.5 } );
@@ -642,18 +630,33 @@
 
             function printScreen() {
                 var strMime = "image/png",
-                    strDownloadMime = "image/octet-stream",
                     imgData = renderer.domElement.toDataURL(strMime);
-                   
-                console.log(imgData);
-                alert(renderer.domElement.toDataURL(strMime));
-                console.log(imgData.replace(strMime, strDownloadMime));
-                window.open( renderer.domElement.toDataURL("image/png"), "screenshot");
-                 
-               
-            /*    var elem = document.getElementById("image");
 
-                elem.value = imgData;*/
+                var data = new FormData();
+                
+
+                var cake_name           = $("#cake_name").val(),
+                    cake_price          = $("#cake_price").val(),
+                    cake_category       = $("#cake_category").val(),
+                    cake_description    = $("#cake_description").val();
+
+                data.append('cake_name',        cake_name);
+                data.append('cake_price',       cake_price);
+                data.append('cake_category',    cake_category);
+                data.append('cake_description', cake_description);
+                data.append('image',            imgData);
+
+                $.ajax({
+                    url: '/savePrintscreen',
+                    type: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    'success': function(data) {
+                        alert("Saved");
+                        location.reload();
+                    }
+                });
 
                 return false;
             }
@@ -682,6 +685,29 @@
     }
 });*/
     </script>
+
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4">
+            <div class="form-group">
+                <label for="cake_name">Name:</label>
+                <input type="text" class="form-control" id="cake_name" name="cake_name" />
+            </div>
+            <div class="form-group">
+                <label for="cake_price">Price:</label>
+                <input type="text" class="form-control" id="cake_price" name="cake_price" />
+            </div>
+            <div class="form-group">
+                <label for="cake_category">Category:</label>
+                <input type="text" class="form-control" id="cake_category" name="cake_category" />
+            </div>
+            <div class="form-group">
+                <label for="cake_pwd">Description:</label>
+                <input type="text" class="form-control" id="cake_description" name="cake_description" />
+            </div>
+
+            <a class="btn btn-primary" onclick="printScreen()">SAVE CAKE</a>
+        </div>
+    </div>
 
 <?php is_array($layers = array('choosebox', 'layer1', 'layer2', 'layer3')); 
 $findLayers=$_SESSION['findLayers'];
